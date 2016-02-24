@@ -52,7 +52,8 @@ def throughput(tcp_ip, tcp_port, buffer_size, file_to_use, successes):
         elapsedTime = endTime-startTime
         elapsedTime = elapsedTime*1000000
         # print("received data:", data)
-        print(str((1024*64)/elapsedTime))
+        print(str(buffer_size/elapsedTime))
+
         success += 1
 
     s.close()
@@ -63,6 +64,7 @@ def interations(tcp_ip, tcp_port, buffer_size, file_to_use, successes):
 
     f = open(file_to_use + ".txt", 'r')
     message = f.read()
+    values = []
     success = 0
     while success != successes:
         startTime = time.time()
@@ -72,11 +74,14 @@ def interations(tcp_ip, tcp_port, buffer_size, file_to_use, successes):
         endTime = time.time()
         elapsedTime = endTime-startTime
         # print("received data:", data)
-        print(str(elapsedTime))
+        values.append(elapsedTime)
 
         success += 1
 
     s.close()
+    print(sum(values))
 
 # The IP here should be the servers IP
-throughput("192.168.1.151", 2696, 1024*64, "64KB", 1000)
+# rtt("192.168.0.105", 2696, 1024, "1KB", 1000)
+# throughput("192.168.0.105", 2696, 1024*1024, "1MB", 1000)
+interations("192.168.0.105", 2696, 1024*1, "1KB", 1024)

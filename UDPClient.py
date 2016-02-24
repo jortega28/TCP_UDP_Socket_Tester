@@ -65,6 +65,7 @@ def throughput16(udp_ip, udp_port, buffer_size, file_to_use, successes):
     f = open(file_to_use + ".txt", 'r')
     message = f.read()
     success = 0
+    lasttime = 0
     while success != successes:
         startTime = time.time()
         s.sendto(message.encode(), (udp_ip, udp_port))
@@ -73,10 +74,18 @@ def throughput16(udp_ip, udp_port, buffer_size, file_to_use, successes):
         elapsedTime = endTime-startTime
         elapsedTime = elapsedTime*1000000
         # print("received data:", data)
-        print(str((1024*16)/elapsedTime))
+        if elapsedTime != 0:
+            print(str(buffer_size/elapsedTime))
+            lasttime = elapsedTime
+        else:
+            if lasttime != 0:
+                print(str(buffer_size/lasttime))
+            else:
+                print(str(0))
         success += 1
     s.close()
 
 # IP here should be the servers IP
-# rtt("192.168.0.104", 2696, 1024*1, "1KB", 1000)
-throughput("192.168.0.104", 2696, 1024*32, "32KB", 32000)
+#rtt("192.168.0.105", 2696, 1024, "1KB", 1000)
+#throughput16("192.168.0.105", 2696, 1024*16, "16KB", 1000)
+throughput("192.168.0.105", 2696, 1024*32, "32KB", 32000)
